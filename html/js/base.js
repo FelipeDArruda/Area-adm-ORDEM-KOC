@@ -77,19 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
             script.onerror = () => console.error(`Falha ao carregar script: ${pageScriptMap[page]}`);
             document.body.appendChild(script);
         }
-
-        // Lógica especial para o dashboard
-        if (page === 'dashboard') {
-            if (typeof Chart === 'undefined') {
-                loadScript('https://cdn.jsdelivr.net/npm/chart.js', function() {
-                    if (typeof initializeDashboard === 'function') {
-                        initializeDashboard();
-                    }
-                });
-            } else if (typeof initializeDashboard === 'function') {
-                initializeDashboard();
-            }
-        }
     }
 
     // Função para carregar scripts dinamicamente
