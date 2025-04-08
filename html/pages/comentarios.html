@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comentários - Admin</title>
+    <style>
+        :root {
+            --dark-bg: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --accent-color: #5e2ced;
+            --text-light: #f0f0f5;
+            --text-secondary: #b8b8d0;
+            --divider-color: rgba(255, 255, 255, 0.1);
+            --danger-color: #ed2c5e;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        .header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+        }
+        
+        .book-section {
+            margin-bottom: 2rem;
+        }
+        
+        .book-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .book-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .comment-count {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+        
+        .comments-list {
+            margin-top: 0.5rem;
+        }
+        
+        .comment-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .comment-content {
+            flex-grow: 1;
+            font-size: 0.9rem;
+        }
+        
+        .comment-user {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--accent-color);
+        }
+        
+        .comment-meta {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-top: 0.2rem;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-start;
+        }
+        
+        .btn-action {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            padding: 0.2rem 0;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-delete {
+            color: var(--danger-color);
+        }
+        
+        .btn-reply {
+            color: var(--accent-color);
+        }
+        
+        .btn-action:hover {
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .comment-item {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .comment-actions {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Comentários</h1>
+        </div>
+        
+        <!-- Knight Of Chaos I -->
+        <div class="book-section">
+            <div class="book-header">
+                <h2 class="book-title">Knight Of Chaos I</h2>
+                <span class="comment-count">5.000 Comentários</span>
+            </div>
+            
+            <div class="comments-list">
+                <div class="comment-item">
+                    <div class="comment-content">
+                        <div class="comment-user">@João</div>
+                        <div>Adore!!</div>
+                        <div class="comment-meta">Cap 1 - 01/04</div>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="btn-action btn-delete">Excluir</button>
+                        <button class="btn-action btn-reply">Responder</button>
+                    </div>
+                </div>
+                
+                <div class="comment-item">
+                    <div class="comment-content">
+                        <div class="comment-user">@Ana</div>
+                        <div>Melhor livro</div>
+                        <div class="comment-meta">Cap 1 - 01/04</div>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="btn-action btn-delete">Excluir</button>
+                        <button class="btn-action btn-reply">Responder</button>
+                    </div>
+                </div>
+                
+                <div class="comment-item">
+                    <div class="comment-content">
+                        <div class="comment-user">@Alien</div>
+                        <div>Top demais!</div>
+                        <div class="comment-meta">Cap 1 - 01/04</div>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="btn-action btn-delete">Excluir</button>
+                        <button class="btn-action btn-reply">Responder</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Knight Of Chaos II -->
+        <div class="book-section">
+            <div class="book-header">
+                <h2 class="book-title">Knight Of Chaos II</h2>
+                <span class="comment-count">3.000 Comentários</span>
+            </div>
+            
+            <div class="comments-list">
+                <div class="comment-item">
+                    <div class="comment-content">
+                        <div class="comment-user">@Maria</div>
+                        <div>Quero mais</div>
+                        <div class="comment-meta">Cap 2 - 02/04</div>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="btn-action btn-delete">Excluir</button>
+                        <button class="btn-action btn-reply">Responder</button>
+                    </div>
+                </div>
+                
+                <div class="comment-item">
+                    <div class="comment-content">
+                        <div class="comment-user">@Lia</div>
+                        <div>Amei o Fernando.</div>
+                        <div class="comment-meta">Cap 1 - 02/04</div>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="btn-action btn-delete">Excluir</button>
+                        <button class="btn-action btn-reply">Responder</button>
+                    </div>
+                </div>
+                
+                <div class="comment-item">
+                    <div class="comment-content">
+                        <div class="comment-user">@Luana</div>
+                        <div>Adore!!</div>
+                        <div class="comment-meta">Cap 1 - 01/04</div>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="btn-action btn-delete">Excluir</button>
+                        <button class="btn-action btn-reply">Responder</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Knight Of Chaos III -->
+        <div class="book-section">
+            <div class="book-header">
+                <h2 class="book-title">Knight Of Chaos III</h2>
+                <span class="comment-count">2.000 Comentários</span>
+            </div>
+            
+            <div class="comments-list">
+                <div class="comment-item">
+                    <div class="comment-content">
+                        <div class="comment-user">@Pedro</div>
+                        <div>Próximo quando?</div>
+                        <div class="comment-meta">Cap 4 - 04/04</div>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="btn-action btn-delete">Excluir</button>
+                        <button class="btn-action btn-reply">Responder</button>
+                    </div>
+                </div>
+                
+                <div class="comment-item">
+                    <div class="comment-content">
+                        <div class="comment-user">@João</div>
+                        <div>Adore!!</div>
+                        <div class="comment-meta">Cap 1 - 01/04</div>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="btn-action btn-delete">Excluir</button>
+                        <button class="btn-action btn-reply">Responder</button>
+                    </div>
+                </div>
+                
+                <div class="comment-item">
+                    <div class="comment-content">
+                        <div class="comment-user">@Maria</div>
+                        <div>Adore!!</div>
+                        <div class="comment-meta">Cap 1 - 01/04</div>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="btn-action btn-delete">Excluir</button>
+                        <button class="btn-action btn-reply">Responder</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Adiciona funcionalidade aos botões
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function() {
+                const comment = this.closest('.comment-item');
+                if (confirm('Tem certeza que deseja excluir este comentário?')) {
+                    comment.style.opacity = '0.5';
+                    comment.style.pointerEvents = 'none';
+                    // Simula a exclusão
+                    setTimeout(() => {
+                        comment.remove();
+                        updateCommentCounts();
+                    }, 300);
+                }
+            });
+        });
+        
+        document.querySelectorAll('.btn-reply').forEach(button => {
+            button.addEventListener('click', function() {
+                const user = this.closest('.comment-item').querySelector('.comment-user').textContent;
+                console.log(`Respondendo ao comentário de ${user}`);
+                // Implemente a lógica de resposta aqui
+            });
+        });
+        
+        // Atualiza as contagens de comentários
+        function updateCommentCounts() {
+            document.querySelectorAll('.book-section').forEach(section => {
+                const countElement = section.querySelector('.comment-count');
+                const currentText = countElement.textContent;
+                const currentCount = parseInt(currentText.replace(/\./g, ''));
+                countElement.textContent = (currentCount - 1).toLocaleString('pt-BR') + ' Comentários';
+            });
+        }
+    </script>
+</body>
+</html>

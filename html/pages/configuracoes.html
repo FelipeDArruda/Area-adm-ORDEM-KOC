@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - KOC Admin</title>
+    <style>
+        :root {
+            --dark-bg: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --accent-color: #5e2ced;
+            --text-light: #f0f0f5;
+            --text-secondary: #b8b8d0;
+            --divider-color: rgba(255, 255, 255, 0.1);
+            --danger-color: #ed2c5e;
+            --warning-color: #ed9a2c;
+            --success-color: #2ced5e;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-color), #9d4cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .settings-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--divider-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .settings-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .settings-tab.active {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+        }
+        
+        .settings-tab:hover:not(.active) {
+            color: var(--text-light);
+        }
+        
+        .settings-content {
+            display: none;
+        }
+        
+        .settings-content.active {
+            display: block;
+        }
+        
+        .settings-section {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--divider-color);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .section-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0.5rem 0 0 0;
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .setting-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        .setting-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .setting-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0.3rem 0 0 0;
+        }
+        
+        .input-text, .input-select, .input-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: rgba(191, 16, 16, 0.05);
+            border: 1px solid var(--divider-color);
+            border-radius: 6px;
+            color: #fff ;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        
+        .input-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .checkbox-group {
+            margin-top: 1rem;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+        
+        .checkbox-item input {
+            margin-right: 0.8rem;
+        }
+        
+        .btn-save {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .btn-save:hover {
+            background-color: #7a4af1;
+        }
+        
+        .email-test {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .email-test-input {
+            flex-grow: 1;
+            padding: 0.8rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--divider-color);
+            border-radius: 6px;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.95rem;
+            margin-right: 0.8rem;
+        }
+        
+        .btn-test {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            border: 1px solid var(--divider-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-test:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .danger-zone {
+            border: 1px solid var(--danger-color);
+            background-color: rgba(237, 44, 94, 0.05);
+        }
+        
+        .danger-title {
+            color: var(--danger-color);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .btn-danger:hover {
+            background-color: #ff2c5e;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .email-test {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .email-test-input {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 0.8rem;
+            }
+            
+            .btn-test {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Configurações do Site</h1>
+        </div>
+        
+        <div class="settings-tabs">
+            <div class="settings-tab active" onclick="switchSettingsTab('site')">Site</div>
+            <div class="settings-tab" onclick="switchSettingsTab('email')">Notificações</div>
+            <div class="settings-tab" onclick="switchSettingsTab('security')">Segurança</div>
+            <div class="settings-tab" onclick="switchSettingsTab('advanced')">Avançado</div>
+        </div>
+        
+        <!-- Configurações do Site -->
+        <div class="settings-content active" id="site-settings">
+            <div class="settings-section">
+                <div class="section-header">
+                    <div>
+                        <h3 class="section-title">Informações Básicas</h3>
+                        <p class="section-description">Configurações gerais do site Knight of Chaos</p>
+                    </div>
+                </div>
+                
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label class="setting-label">Nome do Site</label>
+                        <input type="text" class="input-text" value="Knight of Chaos">
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Slogan</label>
+                        <input type="text" class="input-text" value="Uma jornada épica através de mundos desconhecidos">
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">URL do Site</label>
+                        <input type="text" class="input-text" value="https://knightofchaos.com">
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Idioma Padrão</label>
+                        <select class="input-select">
+                            <option>Português (Brasil)</option>
+                            <option>Inglês</option>
+                            <option>Espanhol</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Manutenção</label>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                        <p class="setting-description">Ativar modo manutenção (o site ficará inacessível para visitantes)</p>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="setting-label">Rodapé do Site</label>
+                    <textarea class="input-textarea">© 2023 Knight of Chaos - Todos os direitos reservados</textarea>
+                </div>
+                
+                <button class="btn-save">Salvar Configurações</button>
+            </div>
+            
+            <div class="settings-section">
+                <div class="section-header">
+                    <div>
+                        <h3 class="section-title">Aparência</h3>
+                        <p class="section-description">Personalize o tema e cores do site</p>
+                    </div>
+                </div>
+                
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label class="setting-label">Tema</label>
+                        <select class="input-select">
+                            <option>Escuro (Padrão)</option>
+                            <option>Claro</option>
+                            <option>Preto</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Cor Primária</label>
+                        <input type="color" value="#5e2ced">
+                        <p class="setting-description">Cor principal usada em botões e links</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Cor Secundária</label>
+                        <input type="color" value="#9d4cff">
+                        <p class="setting-description">Cor de destaque para elementos secundários</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Logo do Site</label>
+                        <input type="file">
+                        <p class="setting-description">Envie uma imagem com no máximo 2MB</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Favicon</label>
+                        <input type="file">
+                        <p class="setting-description">Ícone exibido na aba do navegador</p>
+                    </div>
+                </div>
+                
+                <button class="btn-save">Salvar Aparência</button>
+            </div>
+        </div>
+        
+        <!-- Configurações de Notificações por E-mail -->
+        <div class="settings-content" id="email-settings">
+            <div class="settings-section">
+                <div class="section-header">
+                    <div>
+                        <h3 class="section-title">Configurações de E-mail</h3>
+                        <p class="section-description">Gerencie como os e-mails são enviados pelo site</p>
+                    </div>
+                </div>
+                
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label class="setting-label">Servidor SMTP</label>
+                        <input type="text" class="input-text" value="smtp.knightofchaos.com">
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Porta SMTP</label>
+                        <input type="text" class="input-text" value="587">
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">E-mail do Remetente</label>
+                        <input type="text" class="input-text" value="noreply@knightofchaos.com">
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Nome do Remetente</label>
+                        <input type="text" class="input-text" value="Knight of Chaos">
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Autenticação</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <p class="setting-description">Exige autenticação no servidor SMTP</p>
+                    </div>
+                </div>
+                
+                <div class="email-test">
+                    <input type="email" class="email-test-input" placeholder="Digite um e-mail para teste">
+                    <button class="btn-test">Enviar E-mail de Teste</button>
+                </div>
+                
+                <button class="btn-save">Salvar Configurações de E-mail</button>
+            </div>
+            
+            <div class="settings-section">
+                <div class="section-header">
+                    <div>
+                        <h3 class="section-title">Alertas e Notificações</h3>
+                        <p class="section-description">Configure quais notificações serão enviadas por e-mail</p>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="setting-label">E-mail do Administrador</label>
+                    <input type="email" class="input-text" value="admin@knightofchaos.com">
+                    <p class="setting-description">E-mail principal para receber alertas importantes</p>
+                </div>
+                
+                <div class="checkbox-group">
+                    <h4>Notificações para Administrador</h4>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="notif-new-user" checked>
+                        <label for="notif-new-user">Novos usuários registrados</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="notif-new-comment" checked>
+                        <label for="notif-new-comment">Novos comentários postados</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="notif-new-support" checked>
+                        <label for="notif-new-support">Novos apoios recebidos</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="notif-error" checked>
+                        <label for="notif-error">Erros críticos no sistema</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="notif-update">
+                        <label for="notif-update">Atualizações disponíveis</label>
+                    </div>
+                </div>
+                
+                <div class="checkbox-group" style="margin-top: 2rem;">
+                    <h4>Notificações para Usuários</h4>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="user-notif-welcome" checked>
+                        <label for="user-notif-welcome">E-mail de boas-vindas para novos usuários</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="user-notif-chapter" checked>
+                        <label for="user-notif-chapter">Novos capítulos publicados</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="user-notif-reply">
+                        <label for="user-notif-reply">Respostas aos comentários</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="user-notif-newsletter">
+                        <label for="user-notif-newsletter">Newsletters mensais</label>
+                    </div>
+                </div>
+                
+                <button class="btn-save">Salvar Configurações de Notificação</button>
+            </div>
+        </div>
+        
+        <!-- Configurações de Segurança -->
+        <div class="settings-content" id="security-settings">
+            <div class="settings-section">
+                <div class="section-header">
+                    <div>
+                        <h3 class="section-title">Proteção Básica</h3>
+                        <p class="section-description">Configurações essenciais para segurança do site</p>
+                    </div>
+                </div>
+                
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label class="setting-label">Autenticação em Dois Fatores</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <p class="setting-description">Exige verificação adicional para acessar a área administrativa</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Limite de Tentativas de Login</label>
+                        <input type="number" class="input-text" value="5" min="1">
+                        <p class="setting-description">Número máximo de tentativas antes de bloquear o IP</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Tempo de Bloqueio (minutos)</label>
+                        <input type="number" class="input-text" value="30" min="1">
+                        <p class="setting-description">Tempo que um IP fica bloqueado após exceder tentativas</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Registro de Atividades</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <p class="setting-description">Registra todas as ações administrativas</p>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Proteção contra Spam</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <p class="setting-description">Ativa filtros para comentários e cadastros suspeitos</p>
+                    </div>
+                </div>
+                
+                <button class="btn-save">Salvar Configurações de Segurança</button>
+            </div>
+            
+            <div class="settings-section">
+                <div class="section-header">
+                    <div>
+                        <h3 class="section-title">Permissões de Acesso</h3>
+                        <p class="section-description">Controle quem pode acessar áreas específicas do site</p>
+                    </div>
+                </div>
+                
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label class="setting-label">Acesso ao Painel Admin</label>
+                        <select class="input-select">
+                            <option>Apenas Administradores</option>
+                            <option>Administradores e Editores</option>
+                            <option>Todos os usuários registrados</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Comentários</label>
+                        <select class="input-select">
+                            <option>Todos podem comentar</option>
+                            <option>Apenas usuários registrados</option>
+                            <option>Apenas apoiadores</option>
+                            <option>Comentários desativados</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Moderação de Comentários</label>
+                        <select class="input-select">
+                            <option>Publicação imediata</option>
+                            <option>Aprovação necessária (primeiro comentário)</option>
+                            <option>Aprovação necessária (todos os comentários)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="btn-save">Salvar Configurações de Acesso</button>
+            </div>
+        </div>
+        
+        <!-- Configurações Avançadas -->
+        <div class="settings-content" id="advanced-settings">
+            <div class="settings-section">
+                <div class="section-header">
+                    <div>
+                        <h3 class="section-title">Configurações Técnicas</h3>
+                        <p class="section-description">Ajustes avançados para desenvolvedores</p>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="setting-label">Código de Analytics</label>
+                    <textarea class="input-textarea" placeholder="Cole aqui o código do Google Analytics ou similar"></textarea>
+                    <p class="setting-description">Este código será inserido no cabeçalho de todas as páginas</p>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="setting-label">Scripts Personalizados</label>
+                    <textarea class="input-textarea" placeholder="Cole aqui qualquer JavaScript adicional"></textarea>
+                    <p class="setting-description">Este código será executado no final de todas as páginas</p>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="setting-label">CSS Personalizado</label>
+                    <textarea class="input-textarea" placeholder="Cole aqui qualquer CSS adicional"></textarea>
+                    <p class="setting-description">Estilos adicionais para personalizar a aparência</p>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="setting-label">Modo Depuração</label>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    <p class="setting-description">Ativa logs detalhados para desenvolvimento (não use em produção)</p>
+                </div>
+                
+                <button class="btn-save">Salvar Configurações Avançadas</button>
+            </div>
+            
+            <div class="settings-section danger-zone">
+                <div class="section-header">
+                    <div>
+                        <h3 class="section-title danger-title">Zona de Perigo</h3>
+                        <p class="section-description">Ações irreversíveis que podem afetar todo o site</p>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="setting-label">Redefinir Todas as Configurações</label>
+                    <p class="setting-description">Volta todas as configurações para os valores padrão</p>
+                    <button class="btn-danger">Redefinir Configurações</button>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="setting-label">Limpar Cache do Site</label>
+                    <p class="setting-description">Remove todos os arquivos temporários e dados em cache</p>
+                    <button class="btn-danger">Limpar Cache</button>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="setting-label">Exportar/Importar Configurações</label>
+                    <p class="setting-description">Faça backup ou restaure todas as configurações do site</p>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                        <button class="btn-test">Exportar Configurações</button>
+                        <button class="btn-test">Importar Configurações</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Alternar entre abas de configurações
+        function switchSettingsTab(tab) {
+            // Esconde todos os conteúdos
+            document.querySelectorAll('.settings-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove a classe active de todas as abas
+            document.querySelectorAll('.settings-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostra o conteúdo selecionado
+            document.getElementById(`${tab}-settings`).classList.add('active');
+            
+            // Ativa a aba selecionada
+            event.currentTarget.classList.add('active');
+        }
+        
+        // Enviar e-mail de teste
+        document.querySelector('.btn-test').addEventListener('click', function() {
+            const email = document.querySelector('.email-test-input').value;
+            if (email && email.includes('@')) {
+                alert(`E-mail de teste enviado para ${email}`);
+            } else {
+                alert('Por favor, insira um endereço de e-mail válido');
+            }
+        });
+        
+        // Confirmar ações perigosas
+        document.querySelectorAll('.btn-danger').forEach(button => {
+            button.addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja realizar esta ação? Esta operação não pode ser desfeita.')) {
+                    alert('Ação realizada com sucesso!');
+                }
+            });
+        });
+        
+        // Auto-resize do textarea
+        document.querySelectorAll('.input-textarea').forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+    </script>
+</body>
+</html>

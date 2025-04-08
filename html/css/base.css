@@ -1,0 +1,106 @@
+/* Estilos Gerais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  background-color: #1c1e20;
+}
+
+/* Menu Lateral */
+.menu-lateral {
+  width: 250px;
+  background-color: #2c3e50;
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  transition: width 0.3s ease;
+  position: fixed;
+  z-index: 1000;
+}
+
+.menu-lateral.menu-collapsed {
+  width: 70px;
+}
+
+.menu-lateral.menu-collapsed .logo-text,
+.menu-lateral.menu-collapsed .menu-item span {
+  display: none;
+}
+
+.logo {
+  padding: 0 20px 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 1px solid #34495e;
+  margin-bottom: 20px;
+}
+
+.logo i {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.logo-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.menu-item {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.menu-item:hover {
+  background-color: #34495e;
+}
+
+.menu-item i {
+  font-size: 18px;
+  width: 24px;
+  margin-right: 12px;
+  text-align: center;
+}
+
+.divisor {
+  height: 1px;
+  background-color: #34495e;
+  margin: 15px 20px;
+}
+
+/* Área de Conteúdo */
+.conteudo {
+  flex: 1;
+  padding: 0px;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+}
+
+.menu-lateral.menu-collapsed ~ .conteudo {
+  margin-left: 70px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .menu-lateral {
+      width: 70px;
+  }
+  .menu-lateral:not(.menu-collapsed) {
+      width: 250px;
+  }
+  .conteudo {
+      margin-left: 70px;
+  }
+}

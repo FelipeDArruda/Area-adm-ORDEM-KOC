@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulos - Knight of Chaos</title>
+    <style>
+        :root {
+            --dark-bg: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --accent-color: #5e2ced;
+            --text-light: #f0f0f5;
+            --text-secondary: #b8b8d0;
+            --divider-color: rgba(255, 255, 255, 0.1);
+            --modal-bg: #1e1e2f;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            margin-bottom: 2.5rem;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 1rem 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #ffffff, #b8b8d0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header h2 {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: normal;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        
+        .book-list {
+            margin-top: 2rem;
+        }
+        
+        .book-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--divider-color);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .book-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        
+        .book-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .book-cover {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        
+        .book-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .chapters-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.3rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .chapters-btn:hover {
+            background-color: #7a4af1;
+            transform: translateY(-2px);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--modal-bg);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .modal-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: var(--text-light);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .chapters-list {
+            margin: 1.5rem 0;
+        }
+        
+        .chapter-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        
+        .chapter-item:hover {
+            background-color: rgba(255, 255, 255, 0.07);
+        }
+        
+        .chapter-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .chapter-number {
+            font-weight: 600;
+            color: var(--accent-color);
+            min-width: 30px;
+        }
+        
+        .chapter-title {
+            font-weight: 500;
+        }
+        
+        .edit-chapter-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-chapter-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .add-chapter-container {
+            margin-top: 2rem;
+            text-align: right;
+        }
+        
+        .add-chapter-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.3rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .add-chapter-btn:hover {
+            background-color: #7a4af1;
+        }
+        
+        .add-chapter-btn::before {
+            content: "+";
+            font-size: 1.2rem;
+        }
+        
+        /* Modal de Edição de Capítulo */
+        .chapter-edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1010;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .chapter-edit-content {
+            background-color: var(--modal-bg);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .chapter-edit-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .chapter-edit-header h2 {
+            font-size: 1.5rem;
+            margin: 0 0 0.5rem 0;
+            color: var(--text-light);
+        }
+        
+        .chapter-edit-header p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-cancel {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.7rem 1.3rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cancel:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-save {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.3rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save:hover {
+            background-color: #7a4af1;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .book-item {
+                padding: 1.2rem 0;
+            }
+            
+            .modal-content,
+            .chapter-edit-content {
+                padding: 1.5rem;
+                width: 95%;
+            }
+            
+            .chapter-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .edit-chapter-btn {
+                align-self: flex-end;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn-cancel,
+            .btn-save {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Capítulos</h1>
+            <h2>Livros Publicados</h2>
+        </div>
+        
+        <div class="book-list">
+            <div class="book-item" onclick="openChaptersModal('Knight Of Chaos I')">
+                <div class="book-info">
+                    <img src="https://illusia.com.br/wp-content/uploads/2019/03/Koc-Illusia-webp.webp" alt="Knight Of Chaos I" class="book-cover">
+                    <h3 class="book-title">Knight Of Chaos I</h3>
+                </div>
+                <button class="chapters-btn">CAPÍTULOS</button>
+            </div>
+            
+            <div class="book-item" onclick="openChaptersModal('Knight Of Chaos II')">
+                <div class="book-info">
+                    <img src="https://illusia.com.br/wp-content/uploads/2019/03/Koc-Illusia-webp.webp" alt="Knight Of Chaos II" class="book-cover">
+                    <h3 class="book-title">Knight Of Chaos II</h3>
+                </div>
+                <button class="chapters-btn">CAPÍTULOS</button>
+            </div>
+            
+            <div class="book-item" onclick="openChaptersModal('Knight Of Chaos III')">
+                <div class="book-info">
+                    <img src="https://illusia.com.br/wp-content/uploads/2019/03/Koc-Illusia-webp.webp" alt="Knight Of Chaos III" class="book-cover">
+                    <h3 class="book-title">Knight Of Chaos III</h3>
+                </div>
+                <button class="chapters-btn">CAPÍTULOS</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Capítulos -->
+    <div class="modal" id="chaptersModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalBookTitle">Capítulos</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="chapters-list" id="chaptersList">
+                <!-- Capítulos serão adicionados dinamicamente aqui -->
+            </div>
+            
+            <div class="add-chapter-container">
+                <button class="add-chapter-btn">Adicionar capítulo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Capítulo -->
+    <div class="chapter-edit-modal" id="chapterEditModal">
+        <div class="chapter-edit-content">
+            <div class="chapter-edit-header">
+                <h2>Editar Capítulo</h2>
+                <p id="chapterEditInfo">Capítulo 1 - Knight Of Chaos I</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="chapterTitle">Título do Capítulo</label>
+                <input type="text" id="chapterTitle" placeholder="Digite o título do capítulo">
+            </div>
+            
+            <div class="form-group">
+                <label for="chapterDate">Data</label>
+                <input type="date" id="chapterDate">
+            </div>
+            
+            <div class="form-group">
+                <label for="chapterContent">Conteúdo</label>
+                <textarea id="chapterContent" placeholder="Insira o texto do capítulo"></textarea>
+            </div>
+            
+            <div class="form-actions">
+                <button class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+                <button class="btn-save">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variável para armazenar o livro atual
+        let currentBook = '';
+        
+        // Função para abrir o modal de capítulos
+        function openChaptersModal(bookTitle) {
+            currentBook = bookTitle;
+            document.getElementById('modalBookTitle').textContent = `${bookTitle} - Capítulos`;
+            
+            // Limpa a lista de capítulos
+            const chaptersList = document.getElementById('chaptersList');
+            chaptersList.innerHTML = '';
+            
+            // Adiciona capítulos de exemplo (substitua por seus dados reais)
+            for (let i = 1; i <= 10; i++) {
+                const chapterItem = document.createElement('div');
+                chapterItem.className = 'chapter-item';
+                chapterItem.innerHTML = `
+                    <div class="chapter-info">
+                        <span class="chapter-number">${i}</span>
+                        <span class="chapter-title">Capítulo ${i}: Título do Capítulo</span>
+                    </div>
+                    <button class="edit-chapter-btn" onclick="openEditChapterModal(${i}, 'Título do Capítulo')">Editar</button>
+                `;
+                chaptersList.appendChild(chapterItem);
+            }
+            
+            document.getElementById('chaptersModal').style.display = 'flex';
+        }
+        
+        // Função para abrir o modal de edição de capítulo
+        function openEditChapterModal(chapterNumber, chapterTitle) {
+            document.getElementById('chapterEditInfo').textContent = 
+                `Capítulo ${chapterNumber} - ${currentBook}`;
+            document.getElementById('chapterTitle').value = chapterTitle;
+            document.getElementById('chapterDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('chapterContent').value = 
+                `Conteúdo do capítulo ${chapterNumber} do livro ${currentBook}...`;
+            
+            document.getElementById('chapterEditModal').style.display = 'flex';
+        }
+        
+        // Função para fechar o modal de capítulos
+        function closeModal() {
+            document.getElementById('chaptersModal').style.display = 'none';
+        }
+        
+        // Função para fechar o modal de edição
+        function closeEditModal() {
+            document.getElementById('chapterEditModal').style.display = 'none';
+        }
+        
+        // Fecha os modais ao clicar fora do conteúdo
+        window.addEventListener('click', function(event) {
+            const chaptersModal = document.getElementById('chaptersModal');
+            if (event.target === chaptersModal) {
+                closeModal();
+            }
+            
+            const editModal = document.getElementById('chapterEditModal');
+            if (event.target === editModal) {
+                closeEditModal();
+            }
+        });
+        
+        // Adiciona evento ao botão "Adicionar capítulo"
+        document.querySelector('.add-chapter-btn').addEventListener('click', function() {
+            const chaptersList = document.getElementById('chaptersList');
+            const chapterCount = chaptersList.children.length + 1;
+            openEditChapterModal(chapterCount, `Novo Capítulo ${chapterCount}`);
+        });
+        
+        // Adiciona evento ao botão "Salvar" no modal de edição
+        document.querySelector('.btn-save').addEventListener('click', function() {
+            alert('Capítulo salvo com sucesso!');
+            closeEditModal();
+        });
+    </script>
+</body>
+</html>

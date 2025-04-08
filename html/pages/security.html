@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segurança - Painel Admin</title>
+    <style>
+        :root {
+            --dark-bg: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --accent-color: #5e2ced;
+            --text-light: #f0f0f5;
+            --text-secondary: #b8b8d0;
+            --divider-color: rgba(255, 255, 255, 0.1);
+            --danger-color: #ed2c5e;
+            --warning-color: #ed9a2c;
+            --success-color: #2ced5e;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-color), #9d4cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .security-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(94, 44, 237, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--accent-color);
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid var(--divider-color);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .security-alerts {
+            margin-bottom: 2rem;
+        }
+        
+        .alert-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background-color: rgba(237, 44, 94, 0.1);
+            border-left: 3px solid var(--danger-color);
+        }
+        
+        .alert-icon {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            color: var(--danger-color);
+        }
+        
+        .alert-content {
+            flex-grow: 1;
+        }
+        
+        .alert-title {
+            font-weight: 600;
+            margin: 0 0 0.2rem 0;
+        }
+        
+        .alert-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        .alert-time {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .security-logs {
+            margin-bottom: 2rem;
+        }
+        
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .log-table th {
+            text-align: left;
+            padding: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .log-table td {
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .log-ip {
+            font-family: monospace;
+        }
+        
+        .log-status {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background-color: rgba(44, 237, 94, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-warning {
+            background-color: rgba(237, 154, 44, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .status-danger {
+            background-color: rgba(237, 44, 94, 0.1);
+            color: var(--danger-color);
+        }
+        
+        .security-settings {
+            margin-bottom: 2rem;
+        }
+        
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .settings-info {
+            flex-grow: 1;
+        }
+        
+        .settings-title {
+            font-weight: 600;
+            margin: 0 0 0.2rem 0;
+        }
+        
+        .settings-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .log-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Segurança do Sistema</h1>
+            <div class="security-status">
+                <div class="status-indicator"></div>
+                <span>Sistema seguro</span>
+            </div>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Tentativas de Login</h3>
+                </div>
+                <div class="card-value">24</div>
+                <p class="card-description">Últimas 24 horas</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Ameaças Bloqueadas</h3>
+                </div>
+                <div class="card-value">5</div>
+                <p class="card-description">Neste mês</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Atualizações Pendentes</h3>
+                </div>
+                <div class="card-value">2</div>
+                <p class="card-description">Atualizações de segurança</p>
+            </div>
+        </div>
+        
+        <div class="security-alerts">
+            <h2>Alertas Recentes</h2>
+            <div class="alert-item">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <h4 class="alert-title">Tentativa de login suspeita</h4>
+                    <p class="alert-description">Múltiplas tentativas de login falhas para a conta admin</p>
+                </div>
+                <div class="alert-time">10 min atrás</div>
+            </div>
+            
+            <div class="alert-item">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <h4 class="alert-title">Novo dispositivo detectado</h4>
+                    <p class="alert-description">Login realizado a partir de um novo dispositivo</p>
+                </div>
+                <div class="alert-time">2 horas atrás</div>
+            </div>
+        </div>
+        
+        <div class="security-logs">
+            <h2>Registro de Acesso</h2>
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>Data/Hora</th>
+                        <th>Usuário</th>
+                        <th>IP</th>
+                        <th>Ação</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2023-06-15 14:30</td>
+                        <td>admin</td>
+                        <td class="log-ip">192.168.1.1</td>
+                        <td>Login bem-sucedido</td>
+                        <td><span class="log-status status-success">Sucesso</span></td>
+                    </tr>
+                    <tr>
+                        <td>2023-06-15 14:25</td>
+                        <td>admin</td>
+                        <td class="log-ip">45.227.253.109</td>
+                        <td>Tentativa de login falha</td>
+                        <td><span class="log-status status-danger">Bloqueado</span></td>
+                    </tr>
+                    <tr>
+                        <td>2023-06-15 13:45</td>
+                        <td>editor</td>
+                        <td class="log-ip">192.168.1.2</td>
+                        <td>Alteração de conteúdo</td>
+                        <td><span class="log-status status-success">Sucesso</span></td>
+                    </tr>
+                    <tr>
+                        <td>2023-06-15 12:10</td>
+                        <td>admin</td>
+                        <td class="log-ip">192.168.1.1</td>
+                        <td>Alteração de configurações</td>
+                        <td><span class="log-status status-warning">Aviso</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="security-settings">
+            <h2>Configurações de Segurança</h2>
+            <div class="settings-item">
+                <div class="settings-info">
+                    <h4 class="settings-title">Autenticação em Dois Fatores</h4>
+                    <p class="settings-description">Exige verificação adicional para logins</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-info">
+                    <h4 class="settings-title">Bloquear IPs Suspeitos</h4>
+                    <p class="settings-description">Bloqueia automaticamente IPs com múltiplas tentativas falhas</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-info">
+                    <h4 class="settings-title">Notificações por Email</h4>
+                    <p class="settings-description">Envia alertas de segurança por email</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-info">
+                    <h4 class="settings-title">Registro Detalhado</h4>
+                    <p class="settings-description">Registra todas as ações administrativas</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simula atualização de status em tempo real
+        function updateSecurityStatus() {
+            const statusIndicator = document.querySelector('.status-indicator');
+            const statusText = document.querySelector('.security-status span');
+            
+            // Simula uma verificação de status (em um sistema real, seria uma chamada API)
+            const isSecure = Math.random() > 0.1; // 90% de chance de estar seguro
+            
+            if (isSecure) {
+                statusIndicator.style.backgroundColor = var(--success-color);
+                statusText.textContent = 'Sistema seguro';
+            } else {
+                statusIndicator.style.backgroundColor = var(--danger-color);
+                statusText.textContent = 'Atenção: risco detectado';
+            }
+        }
+        
+        // Atualiza a cada 30 segundos
+        setInterval(updateSecurityStatus, 30000);
+        
+        // Atualiza os logs dinamicamente (simulação)
+        function addNewLog() {
+            const logTable = document.querySelector('.log-table tbody');
+            const now = new Date();
+            const timeString = now.toISOString().replace('T', ' ').substring(0, 16);
+            const actions = ['Login bem-sucedido', 'Tentativa de login falha', 'Alteração de conteúdo', 'Alteração de configurações'];
+            const statuses = ['status-success', 'status-danger', 'status-warning'];
+            const statusTexts = ['Sucesso', 'Bloqueado', 'Aviso'];
+            
+            const randomAction = actions[Math.floor(Math.random() * actions.length)];
+            const randomStatus = Math.floor(Math.random() * 3);
+            
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${timeString}</td>
+                <td>${Math.random() > 0.5 ? 'admin' : 'editor'}</td>
+                <td class="log-ip">${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}</td>
+                <td>${randomAction}</td>
+                <td><span class="log-status ${statuses[randomStatus]}">${statusTexts[randomStatus]}</span></td>
+            `;
+            
+            logTable.insertBefore(newRow, logTable.firstChild);
+            
+            // Mantém apenas os 10 logs mais recentes
+            if (logTable.children.length > 10) {
+                logTable.removeChild(logTable.lastChild);
+            }
+        }
+        
+        // Adiciona um novo log a cada 1-3 minutos
+        setInterval(addNewLog, Math.random() * 120000 + 60000);
+    </script>
+</body>
+</html>

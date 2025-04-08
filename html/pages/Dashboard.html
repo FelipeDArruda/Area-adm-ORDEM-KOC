@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Dashboard</h1>
+        
+        <div class="dashboard-section">
+            <h2>Visualizações</h2>
+            <div class="filter-options">
+                <span class="filter active" data-period="year">Ano</span>
+                <span class="filter" data-period="month">Mês</span>
+                <span class="filter" data-period="week">Semana</span>
+            </div>
+            
+            <!-- Gráfico principal -->
+            <div class="chart-container">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </div>
+    
+        <div class="divider"></div>
+    
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Livros Cadastrados</h3>
+                <div class="stat-value">01</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Capítulos Publicados</h3>
+                <div class="stat-value">70</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Palavras Lançadas</h3>
+                <div class="stat-value">40.000</div>
+            </div>
+        </div>
+    
+        <div class="divider"></div>
+    
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Capítulos Mensais</h3>
+                <div class="stat-value">40</div>
+                <div class="chart-container-small">
+                    <canvas id="monthlyChaptersChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Capítulos Semanais</h3>
+                <div class="stat-value">09</div>
+                <div class="chart-container-small">
+                    <canvas id="weeklyChaptersChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Apoio - KOC</title>
+    <style>
+        :root {
+            --dark-bg: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --accent-color: #5e2ced;
+            --text-light: #f0f0f5;
+            --text-secondary: #b8b8d0;
+            --divider-color: rgba(255, 255, 255, 0.1);
+            --success-color: #2ced5e;
+            --basic-color: #2c9bed;
+            --silver-color: #b8b8d0;
+            --gold-color: #edc22c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-color), #9d4cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .connect-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .connect-btn:hover {
+            background-color: #7a4af1;
+            transform: translateY(-2px);
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid var(--divider-color);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-bottom: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid var(--divider-color);
+            position: relative;
+        }
+        
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .supporters-list {
+            margin-top: 2rem;
+        }
+        
+        .supporter-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--divider-color);
+        }
+        
+        .supporter-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            margin-right: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .supporter-info {
+            flex-grow: 1;
+        }
+        
+        .supporter-name {
+            font-weight: 600;
+            margin: 0 0 0.2rem 0;
+        }
+        
+        .supporter-details {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        .supporter-amount {
+            font-weight: 600;
+            color: var(--success-color);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--divider-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+        }
+        
+        .tab:hover:not(.active) {
+            color: var(--text-light);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Estilos para a seção de Usuários/Assinantes dentro de Análises */
+        .subscription-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--divider-color);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+            background: linear-gradient(90deg, var(--accent-color), #9d4cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        
+        .users-table th {
+            text-align: left;
+            padding: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .users-table td {
+            padding: 1rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--divider-color);
+            vertical-align: middle;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-basic {
+            background-color: rgba(44, 155, 237, 0.1);
+            color: var(--basic-color);
+        }
+        
+        .status-silver {
+            background-color: rgba(184, 184, 208, 0.1);
+            color: var(--silver-color);
+        }
+        
+        .status-gold {
+            background-color: rgba(237, 194, 44, 0.1);
+            color: var(--gold-color);
+        }
+        
+        .btn-delete {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-delete:hover {
+            color: var(--danger-color);
+        }
+        
+        .search-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            max-width: 400px;
+            padding: 0.8rem 1rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--divider-color);
+            border-radius: 6px;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        
+        .filter-select {
+            padding: 0.8rem 1rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--divider-color);
+            border-radius: 6px;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.95rem;
+            margin-left: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .subscription-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .search-input,
+            .filter-select {
+                width: 100%;
+                max-width: none;
+                margin-left: 0;
+            }
+            
+            .users-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Plataforma de Apoio KOC</h1>
+            <button class="connect-btn">
+                Conectar com apoia.se
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 7H21V21H3V3H13V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 3H21V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M11 13L3 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('overview')">Visão Geral</div>
+            <div class="tab" onclick="switchTab('supporters')">Apoiadores</div>
+            <div class="tab" onclick="switchTab('analytics')">Análises</div>
+        </div>
+        
+        <div class="tab-content active" id="overview">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Total Arrecadado</h3>
+                    </div>
+                    <div class="card-value">R$ 12.548,90</div>
+                    <p class="card-description">+15% em relação ao mês passado</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Apoiadores</h3>
+                    </div>
+                    <div class="card-value">1.243</div>
+                    <p class="card-description">Dos quais 843 são leitores KOC</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Meta Mensal</h3>
+                    </div>
+                    <div class="card-value">68%</div>
+                    <p class="card-description">R$ 7.451,10 faltando</p>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    Gráfico de Arrecadação Mensal (Integração com apoia.se)
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="supporters">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Novos Apoiadores</h3>
+                    </div>
+                    <div class="card-value">47</div>
+                    <p class="card-description">Este mês</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Taxa de Conversão</h3>
+                    </div>
+                    <div class="card-value">3.2%</div>
+                    <p class="card-description">Visitantes para apoiadores</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Valor Médio</h3>
+                    </div>
+                    <div class="card-value">R$ 10,09</div>
+                    <p class="card-description">Por apoiador/mês</p>
+                </div>
+            </div>
+            
+            <div class="supporters-list">
+                <h2>Principais Apoiadores</h2>
+                
+                <div class="supporter-item">
+                    <div class="supporter-avatar">JL</div>
+                    <div class="supporter-info">
+                        <h4 class="supporter-name">João L.</h4>
+                        <p class="supporter-details">Apoiador desde 15/03/2023 • Leitor KOC</p>
+                    </div>
+                    <div class="supporter-amount">R$ 50/mês</div>
+                </div>
+                
+                <div class="supporter-item">
+                    <div class="supporter-avatar">AM</div>
+                    <div class="supporter-info">
+                        <h4 class="supporter-name">Ana M.</h4>
+                        <p class="supporter-details">Apoiador desde 22/04/2023 • Leitora KOC</p>
+                    </div>
+                    <div class="supporter-amount">R$ 30/mês</div>
+                </div>
+                
+                <div class="supporter-item">
+                    <div class="supporter-avatar">PS</div>
+                    <div class="supporter-info">
+                        <h4 class="supporter-name">Pedro S.</h4>
+                        <p class="supporter-details">Apoiador desde 05/05/2023</p>
+                    </div>
+                    <div class="supporter-amount">R$ 25/mês</div>
+                </div>
+                
+                <div class="supporter-item">
+                    <div class="supporter-avatar">MC</div>
+                    <div class="supporter-info">
+                        <h4 class="supporter-name">Maria C.</h4>
+                        <p class="supporter-details">Apoiador desde 18/01/2023 • Leitora KOC</p>
+                    </div>
+                    <div class="supporter-amount">R$ 20/mês</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="analytics">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Leitores KOC</h3>
+                    </div>
+                    <div class="card-value">843</div>
+                    <p class="card-description">67% dos apoiadores</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Novos Leitores</h3>
+                    </div>
+                    <div class="card-value">214</div>
+                    <p class="supporter-details">Vindos da plataforma de apoio</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Engajamento</h3>
+                    </div>
+                    <div class="card-value">4.8★</div>
+                    <p class="card-description">Avaliação média dos apoiadores</p>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    Gráfico de Conversão: Visitantes → Apoiadores → Leitores KOC
+                </div>
+            </div>
+            
+            <!-- Seção de Usuários/Assinantes dentro de Análises -->
+            <div class="subscription-stats">
+                <div class="stat-card">
+                    <div class="stat-value">30%</div>
+                    <p class="stat-label">Taxa de conversão</p>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value">40%</div>
+                    <p class="stat-label">Retenção mensal</p>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value">1.243</div>
+                    <p class="stat-label">Total de assinantes</p>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value">R$ 12.548</div>
+                    <p class="stat-label">Receita mensal</p>
+                </div>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Pesquisar usuários...">
+                <div>
+                    <select class="filter-select">
+                        <option>Todos os status</option>
+                        <option>Básico</option>
+                        <option>Prata</option>
+                        <option>Ouro</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>Ordenar por data</option>
+                        <option>Ordenar por nome</option>
+                        <option>Ordenar por plano</option>
+                    </select>
+                </div>
+            </div>
+            
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <div class="user-avatar">ML</div>
+                                Maria Lima
+                            </div>
+                        </td>
+                        <td>maria@gmail.com</td>
+                        <td><span class="status-badge status-basic">Básico</span></td>
+                        <td>15/04</td>
+                        <td><button class="btn-delete">Excluir</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <div class="user-avatar">PS</div>
+                                Pedro Souza
+                            </div>
+                        </td>
+                        <td>pedro@gmail.com</td>
+                        <td><span class="status-badge status-silver">Prata</span></td>
+                        <td>20/03</td>
+                        <td><button class="btn-delete">Excluir</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <div class="user-avatar">AC</div>
+                                Ana Costa
+                            </div>
+                        </td>
+                        <td>ana@gmail.com</td>
+                        <td><span class="status-badge status-gold">Ouro</span></td>
+                        <td>31/03</td>
+                        <td><button class="btn-delete">Excluir</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <div class="user-avatar">JL</div>
+                                João Lima
+                            </div>
+                        </td>
+                        <td>joao@gmail.com</td>
+                        <td><span class="status-badge status-basic">Básico</span></td>
+                        <td>12/04</td>
+                        <td><button class="btn-delete">Excluir</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <div class="user-avatar">FC</div>
+                                Fernanda Costa
+                            </div>
+                        </td>
+                        <td>fernanda@gmail.com</td>
+                        <td><span class="status-badge status-silver">Prata</span></td>
+                        <td>05/04</td>
+                        <td><button class="btn-delete">Excluir</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Alternar entre abas
+        function switchTab(tabId) {
+            // Esconde todos os conteúdos
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove a classe active de todas as abas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostra o conteúdo selecionado
+            document.getElementById(tabId).classList.add('active');
+            
+            // Ativa a aba selecionada
+            event.currentTarget.classList.add('active');
+        }
+        
+        // Função para deletar usuários
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                if (confirm('Tem certeza que deseja excluir este usuário?')) {
+                    row.style.opacity = '0.5';
+                    setTimeout(() => {
+                        row.remove();
+                        updateStats();
+                    }, 300);
+                }
+            });
+        });
+        
+        // Função para filtrar tabela
+        document.querySelector('.search-input').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.users-table tbody tr');
+            
+            rows.forEach(row => {
+                const name = row.querySelector('td:first-child').textContent.toLowerCase();
+                const email = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || email.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Função para filtrar por status
+        document.querySelectorAll('.filter-select')[0].addEventListener('change', function() {
+            const statusFilter = this.value;
+            const rows = document.querySelectorAll('.users-table tbody tr');
+            
+            rows.forEach(row => {
+                const status = row.querySelector('td:nth-child(3) span').textContent;
+                
+                if (statusFilter === 'Todos os status' || status === statusFilter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Função para ordenar tabela
+        document.querySelectorAll('.filter-select')[1].addEventListener('change', function() {
+            const sortBy = this.value;
+            const tbody = document.querySelector('.users-table tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            rows.sort((a, b) => {
+                const aValue = getSortValue(a, sortBy);
+                const bValue = getSortValue(b, sortBy);
+                
+                if (sortBy.includes('data')) {
+                    return compareDates(aValue, bValue);
+                }
+                return aValue.localeCompare(bValue);
+            });
+            
+            // Reinsere as linhas ordenadas
+            rows.forEach(row => tbody.appendChild(row));
+        });
+        
+        function getSortValue(row, sortBy) {
+            if (sortBy.includes('nome')) {
+                return row.querySelector('td:first-child').textContent;
+            } else if (sortBy.includes('plano')) {
+                return row.querySelector('td:nth-child(3) span').textContent;
+            } else {
+                // Ordenar por data (padrão)
+                return row.querySelector('td:nth-child(4)').textContent;
+            }
+        }
+        
+        function compareDates(a, b) {
+            // Converte datas no formato DD/MM para objeto Date
+            const [dayA, monthA] = a.split('/').map(Number);
+            const [dayB, monthB] = b.split('/').map(Number);
+            
+            // Considera o ano atual para comparação
+            const dateA = new Date(new Date().getFullYear(), monthA - 1, dayA);
+            const dateB = new Date(new Date().getFullYear(), monthB - 1, dayB);
+            
+            return dateB - dateA; // Mais recente primeiro
+        }
+        
+        // Atualiza estatísticas após exclusão
+        function updateStats() {
+            const totalSubscribers = document.querySelectorAll('.users-table tbody tr').length;
+            document.querySelector('.subscription-stats .stat-card:nth-child(3) .stat-value').textContent = totalSubscribers;
+        }
+        
+        // Simular integração com API do apoia.se
+        function fetchApoiaseData() {
+            // Em um sistema real, isso seria uma chamada API
+            console.log("Conectando com apoia.se para obter dados...");
+            
+            // Simular delay de carregamento
+            setTimeout(() => {
+                // Atualizar valores dinamicamente
+                const supportersElement = document.querySelector('.dashboard .card:nth-child(2) .card-value');
+                const newSupporters = Math.floor(Math.random() * 10) + 1;
+                const currentSupporters = parseInt(supportersElement.textContent.replace('.', ''));
+                supportersElement.textContent = (currentSupporters + newSupporters).toLocaleString('pt-BR');
+                
+                // Adicionar novo apoiador à lista
+                const names = ['Carlos', 'Fernanda', 'Ricardo', 'Beatriz', 'Lucas'];
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                const isKOCReader = Math.random() > 0.3; // 70% de chance de ser leitor KOC
+                
+                const supportersList = document.querySelector('.supporters-list');
+                const newSupporter = document.createElement('div');
+                newSupporter.className = 'supporter-item';
+                newSupporter.innerHTML = `
+                    <div class="supporter-avatar">${randomName.substring(0, 1)}</div>
+                    <div class="supporter-info">
+                        <h4 class="supporter-name">${randomName} ${randomName.substring(0, 1)}.</h4>
+                        <p class="supporter-details">Apoiador desde ${new Date().toLocaleDateString('pt-BR')} ${isKOCReader ? '• Leitor KOC' : ''}</p>
+                    </div>
+                    <div class="supporter-amount">R$ ${Math.floor(Math.random() * 30) + 10}/mês</div>
+                `;
+                
+                supportersList.insertBefore(newSupporter, supportersList.children[1]);
+                
+                // Atualizar contador de leitores KOC se for o caso
+                if (isKOCReader) {
+                    const kocReadersElement = document.querySelector('#analytics .card:nth-child(1) .card-value');
+                    const currentReaders = parseInt(kocReadersElement.textContent);
+                    kocReadersElement.textContent = currentReaders + 1;
+                }
+            }, 1500);
+        }
+        
+        // Simular atualização periódica de dados
+        setInterval(fetchApoiaseData, 10000);
+        
+        // Conectar com apoia.se
+        document.querySelector('.connect-btn').addEventListener('click', function() {
+            alert("Integração com apoia.se será realizada aqui");
+            fetchApoiaseData();
+        });
+    </script>
+</body>
+</html>

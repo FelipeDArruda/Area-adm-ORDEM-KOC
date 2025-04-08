@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interno - Equipe KOC</title>
+    <style>
+        :root {
+            --dark-bg: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --accent-color: #5e2ced;
+            --text-light: #f0f0f5;
+            --text-secondary: #b8b8d0;
+            --divider-color: rgba(255, 255, 255, 0.1);
+            --author-color: #5e2ced;
+            --dev-color: #2ced5e;
+            --reviewer-color: #ed9a2c;
+            --unknown-color: #ed2c5e;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex
+;
+    flex-direction: column;
+    height: 100vh;
+        }
+        
+        .header {
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-color), #9d4cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .chat-container {
+            display: flex;
+            flex-grow: 1;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--divider-color);
+        }
+        
+        .sidebar {
+            width: 300px;
+            border-right: 1px solid var(--divider-color);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .user-list {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .user-item:hover, .user-item.active {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .avatar-author {
+            background-color: var(--author-color);
+        }
+        
+        .avatar-dev {
+            background-color: var(--dev-color);
+        }
+        
+        .avatar-reviewer {
+            background-color: var(--reviewer-color);
+        }
+        
+        .avatar-unknown {
+            background-color: var(--unknown-color);
+        }
+        
+        .user-info {
+            flex-grow: 0;
+        }
+        
+        .user-name {
+            margin-bottom: 5px;
+            font-weight: 600;
+            margin: 0 7px 0.2rem 0;
+        }
+        
+        .user-role {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        
+        .chat-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--divider-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .chat-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .chat-messages {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            max-width: 70%;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message.received {
+            align-self: flex-start;
+        }
+        
+        .message.sent {
+            align-self: flex-end;
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 0.8rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: white;
+        }
+        
+        .message-sender {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .message-time {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-left: 0.8rem;
+        }
+        
+        .message-content {
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .received .message-content {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-bottom-left-radius: 4px;
+        }
+        
+        .sent .message-content {
+            background-color: var(--accent-color);
+            border-bottom-right-radius: 4px;
+        }
+        
+        .chat-input {
+            padding: 1.5rem;
+            border-top: 1px solid var(--divider-color);
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .message-input {
+            flex-grow: 1;
+            padding: 0.8rem 1rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--divider-color);
+            border-radius: 20px;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: none;
+            height: 40px;
+            max-height: 120px;
+        }
+        
+        .send-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .send-btn:hover {
+            background-color: #7a4af1;
+            transform: translateY(-2px);
+        }
+        
+        .platform-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .platform-btn {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--divider-color);
+            color: var(--text-light);
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .platform-btn.active {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                height: auto;
+            }
+            
+            .chat-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--divider-color);
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Chat Interno - Equipe KOC</h1>
+        </div>
+        
+        <div class="platform-selector">
+            <button class="platform-btn active" onclick="switchPlatform('internal')">Chat Interno</button>
+            <button class="platform-btn" onclick="switchPlatform('whatsapp')">WhatsApp</button>
+            <button class="platform-btn" onclick="switchPlatform('telegram')">Telegram</button>
+        </div>
+        
+        <div class="chat-container">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h3 class="sidebar-title">Membros da Equipe</h3>
+                </div>
+                <div class="user-list">
+                    <div class="user-item active" onclick="switchChat('group')">
+                        <div class="user-avatar avatar-author">K</div>
+                        <div class="user-info">
+                            <h4 class="user-name">Grupo</h4>
+                            <p class="user-role">Todos os membros</p>
+                        </div>
+                    </div>
+                    <div class="user-item" onclick="switchChat('glauber')">
+                        <div class="user-avatar avatar-author">G</div>
+                        <div class="user-info">
+                            <h4 class="user-name">Glauber</h4>
+                            <p class="user-role">Autor</p>
+                        </div>
+                    </div>
+                    <div class="user-item" onclick="switchChat('arruda')">
+                        <div class="user-avatar avatar-dev">A</div>
+                        <div class="user-info">
+                            <h4 class="user-name">Arruda</h4>
+                            <p class="user-role">Desenvolvedor</p>
+                        </div>
+                    </div>
+                    <div class="user-item" onclick="switchChat('ali')">
+                        <div class="user-avatar avatar-reviewer">A</div>
+                        <div class="user-info">
+                            <h4 class="user-name">Ali</h4>
+                            <p class="user-role">Revisor</p>
+                        </div>
+                    </div>
+                    <div class="user-item" onclick="switchChat('sancho')">
+                        <div class="user-avatar avatar-dev">S</div>
+                        <div class="user-info">
+                            <h4 class="user-name">Sancho</h4>
+                            <p class="user-role">Desenvolvedor</p>
+                        </div>
+                    </div>
+                    <div class="user-item" onclick="switchChat('leandro')">
+                        <div class="user-avatar avatar-unknown">L</div>
+                        <div class="user-info">
+                            <h4 class="user-name">Leandro</h4>
+                            <p class="user-role">Desconhecido</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-area">
+                <div class="chat-header">
+                    <h3 class="chat-title">Grupo Principal</h3>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Mensagens do grupo -->
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-author">G</div>
+                            <span class="message-sender">Glauber</span>
+                            <span class="message-time">10:30</span>
+                        </div>
+                        <div class="message-content">
+                            Pessoal, como está o progresso do capítulo 12? Preciso enviar para revisão até sexta.
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-reviewer">A</div>
+                            <span class="message-sender">Ali</span>
+                            <span class="message-time">10:32</span>
+                        </div>
+                        <div class="message-content">
+                            Estou terminando a revisão do capítulo 11 hoje. Amanhã começo o 12.
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-dev">A</div>
+                            <span class="message-sender">Arruda</span>
+                            <span class="message-time">10:35</span>
+                        </div>
+                        <div class="message-content">
+                            A página de comentários está quase pronta. Só falta integrar com o back-end.
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-dev">S</div>
+                            <span class="message-sender">Sancho</span>
+                            <span class="message-time">10:36</span>
+                        </div>
+                        <div class="message-content">
+                            Arruda, me avisa quando terminar que eu ajudo com os testes.
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-unknown">L</div>
+                            <span class="message-sender">Leandro</span>
+                            <span class="message-time">10:40</span>
+                        </div>
+                        <div class="message-content">
+                            Galera, vocês sabem quando sai o próximo capítulo? Sou fã do trabalho de vocês!
+                        </div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-header">
+                            <span class="message-time">10:42</span>
+                        </div>
+                        <div class="message-content">
+                            Leandro, este chat é apenas para a equipe. Por favor, use o chat público para dúvidas.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <div class="input-group">
+                        <textarea class="message-input" placeholder="Digite sua mensagem..." rows="1"></textarea>
+                        <button class="send-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Alternar entre plataformas de chat
+        function switchPlatform(platform) {
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Em um sistema real, aqui seria a integração com a plataforma escolhida
+            console.log(`Mudando para ${platform}`);
+        }
+        
+        // Alternar entre conversas
+        function switchChat(user) {
+            document.querySelectorAll('.user-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '';
+            
+            // Adiciona mensagens fictícias baseadas no usuário selecionado
+            if (user === 'group') {
+                chatMessages.innerHTML = `
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-author">G</div>
+                            <span class="message-sender">Glauber</span>
+                            <span class="message-time">10:30</span>
+                        </div>
+                        <div class="message-content">
+                            Pessoal, como está o progresso do capítulo 12? Preciso enviar para revisão até sexta.
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-reviewer">A</div>
+                            <span class="message-sender">Ali</span>
+                            <span class="message-time">10:32</span>
+                        </div>
+                        <div class="message-content">
+                            Estou terminando a revisão do capítulo 11 hoje. Amanhã começo o 12.
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-dev">A</div>
+                            <span class="message-sender">Arruda</span>
+                            <span class="message-time">10:35</span>
+                        </div>
+                        <div class="message-content">
+                            A página de comentários está quase pronta. Só falta integrar com o back-end.
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-dev">S</div>
+                            <span class="message-sender">Sancho</span>
+                            <span class="message-time">10:36</span>
+                        </div>
+                        <div class="message-content">
+                            Arruda, me avisa quando terminar que eu ajudo com os testes.
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-unknown">L</div>
+                            <span class="message-sender">Leandro</span>
+                            <span class="message-time">10:40</span>
+                        </div>
+                        <div class="message-content">
+                            Galera, vocês sabem quando sai o próximo capítulo? Sou fã do trabalho de vocês!
+                        </div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-header">
+                            <span class="message-time">10:42</span>
+                        </div>
+                        <div class="message-content">
+                            Leandro, este chat é apenas para a equipe. Por favor, use o chat público para dúvidas.
+                        </div>
+                    </div>
+                `;
+            } else if (user === 'glauber') {
+                chatMessages.innerHTML = `
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-author">G</div>
+                            <span class="message-sender">Glauber</span>
+                            <span class="message-time">09:15</span>
+                        </div>
+                        <div class="message-content">
+                            Você já viu as últimas alterações que fiz no capítulo?
+                        </div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-header">
+                            <span class="message-time">09:20</span>
+                        </div>
+                        <div class="message-content">
+                            Ainda não, vou dar uma olhada agora.
+                        </div>
+                    </div>
+                `;
+            } else if (user === 'arruda') {
+                chatMessages.innerHTML = `
+                    <div class="message received">
+                        <div class="message-header">
+                            <div class="message-avatar avatar-dev">A</div>
+                            <span class="message-sender">Arruda</span>
+                            <span class="message-time">14:05</span>
+                        </div>
+                        <div class="message-content">
+                            Terminei a integração com a API de pagamentos. Precisa testar no seu ambiente.
+                        </div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-header">
+                            <span class="message-time">14:10</span>
+                        </div>
+                        <div class="message-content">
+                            Ótimo! Vou testar ainda hoje e te dou o feedback.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Rolagem automática para a mensagem mais recente
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Enviar mensagem
+        document.querySelector('.send-btn').addEventListener('click', function() {
+            const input = document.querySelector('.message-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                const now = new Date();
+                const timeString = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+                
+                const newMessage = document.createElement('div');
+                newMessage.className = 'message sent';
+                newMessage.innerHTML = `
+                    <div class="message-header">
+                        <span class="message-time">${timeString}</span>
+                    </div>
+                    <div class="message-content">
+                        ${message}
+                    </div>
+                `;
+                
+                chatMessages.appendChild(newMessage);
+                input.value = '';
+                
+                // Rolagem automática para a mensagem mais recente
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Simular resposta após 1-3 segundos
+                setTimeout(simulateReply, Math.random() * 2000 + 1000);
+            }
+        });
+        
+        // Tecla Enter para enviar mensagem
+        document.querySelector('.message-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                document.querySelector('.send-btn').click();
+            }
+        });
+        
+        // Auto-resize do textarea
+        document.querySelector('.message-input').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+        
+        // Simular resposta de outros membros
+        function simulateReply() {
+            const activeUser = document.querySelector('.user-item.active');
+            if (!activeUser) return;
+            
+            const userId = activeUser.getAttribute('onclick').replace("switchChat('", "").replace("')", "");
+            if (userId === 'group') return; // Não simular respostas no grupo
+            
+            const chatMessages = document.getElementById('chatMessages');
+            const now = new Date();
+            const timeString = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+            
+            const replies = {
+                glauber: [
+                    "Precisamos conversar sobre o desenvolvimento dos personagens no próximo arco.",
+                    "Você já leu o rascunho que enviei?",
+                    "Estou pensando em mudar o final do capítulo 15."
+                ],
+                arruda: [
+                    "Encontrei um bug na página de perfil do usuário.",
+                    "Atualizei o repositório com as últimas alterações.",
+                    "Preciso que você revise o PR #42 quando puder."
+                ],
+                ali: [
+                    "Enviei as anotações de revisão para o capítulo 10.",
+                    "Tem uma inconsistência na linha do tempo do capítulo 8.",
+                    "A revisão ficará pronta até amanhã."
+                ],
+                sancho: [
+                    "Terminei os testes da nova funcionalidade.",
+                    "Arruda, você pode me ajudar com um problema no Docker?",
+                    "Atualizei a documentação da API."
+                ],
+                leandro: [
+                    "Desculpe a intromissão novamente!",
+                    "Como faço para participar da equipe?",
+                    "Adoro o trabalho de vocês!"
+                ]
+            };
+            
+            const randomReply = replies[userId][Math.floor(Math.random() * replies[userId].length)];
+            
+            const newMessage = document.createElement('div');
+            newMessage.className = 'message received';
+            
+            let avatarClass = '';
+            let senderName = '';
+            
+            switch(userId) {
+                case 'glauber':
+                    avatarClass = 'avatar-author';
+                    senderName = 'Glauber';
+                    break;
+                case 'arruda':
+                case 'sancho':
+                    avatarClass = 'avatar-dev';
+                    senderName = userId === 'arruda' ? 'Arruda' : 'Sancho';
+                    break;
+                case 'ali':
+                    avatarClass = 'avatar-reviewer';
+                    senderName = 'Ali';
+                    break;
+                case 'leandro':
+                    avatarClass = 'avatar-unknown';
+                    senderName = 'Leandro';
+                    break;
+            }
+            
+            newMessage.innerHTML = `
+                <div class="message-header">
+                    <div class="message-avatar ${avatarClass}">${senderName.substring(0, 1)}</div>
+                    <span class="message-sender">${senderName}</span>
+                    <span class="message-time">${timeString}</span>
+                </div>
+                <div class="message-content">
+                    ${randomReply}
+                </div>
+            `;
+            
+            chatMessages.appendChild(newMessage);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>

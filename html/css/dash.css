@@ -1,0 +1,98 @@
+.dashboard-container {
+    padding: 20px;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dashboard-container h1 {
+    color: #ffffff;
+    margin-bottom: 25px;
+}
+
+.dashboard-section h2 {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+/* Estilos para os filtros */
+.filter-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: #e0e0e0;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+}
+
+.filter.active {
+    background-color: #2c3e50;
+    color: white;
+    font-weight: normal;
+}
+
+.filter:hover:not(.active) {
+    background-color: #d0d0d0;
+}
+
+.divider {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 25px 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background-color: rgb(0, 0, 0);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+    color: #7f8c8d;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* Estilos para gráficos */
+/* Estilos para gráficos */
+.chart-container {
+    height: 250px;
+    margin-top: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.chart-container-small {
+    height: 80px;
+    margin-top: 10px;
+    position: relative;
+    width: 100%;
+}
+
+/* Garante que os canvases dos gráficos sejam responsivos */
+canvas {
+    max-width: 100%;
+    height: auto !important;
+}
+

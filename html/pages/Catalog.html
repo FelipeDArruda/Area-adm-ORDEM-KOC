@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knight of Chaos - Catálogo</title>
+    <style>
+        :root {
+            --dark-bg: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --accent-color: #f5f1ff;
+            --text-light: #f0f0f5;
+            --text-secondary: #b8b8d0;
+            --modal-bg: #1e1e2f;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #ffffff, #b8b8d0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        
+        .header h1::after {
+            content: "GLAUBER 1907";
+            position: absolute;
+            font-size: 0.8rem;
+            bottom: -1.2rem;
+            left: 0;
+            color: var(--text-secondary);
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+        
+        .add-book-btn {
+            background-color:#7a4af1 ;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(94, 44, 237, 0.3);
+        }
+        
+        .add-book-btn:hover {
+            background-color: #7a4af1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(94, 44, 237, 0.4);
+        }
+        
+        .add-book-btn::before {
+            content: "+";
+            font-size: 1.2rem;
+        }
+        
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .book-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 1.5rem;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .book-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), #9d4cff);
+        }
+        
+        .book-cover-container {
+            padding: 1.5rem 1.5rem 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .book-cover {
+            width: 180px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .book-card:hover .book-cover {
+            transform: scale(1.03);
+        }
+        
+        .book-info {
+            padding: 1.5rem;
+            width: 100%;
+        }
+        
+        .book-info h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .book-info .author {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-align: center;
+        }
+        
+        .book-info .description {
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+            opacity: 0.9;
+            text-align: center;
+        }
+        
+        .book-info .chapters {
+            display: inline-block;
+            background-color: rgba(94, 44, 237, 0.2);
+            color: var(--accent-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .edit-btn {
+            background: none;
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .edit-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 2rem 0;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--modal-bg);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        .modal-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.8rem;
+            margin: 0 0 0.5rem;
+            color: var(--text-light);
+        }
+        
+        .modal-header .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn-cancel {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cancel:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-save {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save:hover {
+            background-color: #7a4af1;
+        }
+        
+        .book-preview {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .book-preview h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .book-preview .author {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .book-preview .description {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .book-preview .chapters {
+            display: inline-block;
+            background-color: rgba(94, 44, 237, 0.2);
+            color: var(--accent-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .book-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .book-cover {
+                width: 150px;
+                height: 210px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>KNIGHT OF CHAOS</h1>
+            <button class="add-book-btn" id="addBookBtn">Adicionar Livro</button>
+        </div>
+        
+        <div class="book-list">
+            <div class="book-card">
+                <div class="book-cover-container">
+                    <img src="https://illusia.com.br/wp-content/uploads/2019/03/Koc-Illusia-webp.webp" alt="Knight Of Chaos I" class="book-cover">
+                </div>
+                <div class="book-info">
+                    <h3>Knight Of Chaos I</h3>
+                    <span class="author">Glauber</span>
+                    <p class="description">Uma jornada épica através de mundos desconhecidos e perigosos.</p>
+                    <span class="chapters">70 Capítulos</span>
+                    <button class="edit-btn" onclick="openEditModal('Knight Of Chaos I', 'Glauber', 'Uma jornada épica através de mundos desconhecidos e perigosos.', '70')">Editar</button>
+                </div>
+            </div>
+            
+            <div class="book-card">
+                <div class="book-cover-container">
+                    <img src="https://illusia.com.br/wp-content/uploads/2019/03/Koc-Illusia-webp.webp" alt="Knight Of Chaos II" class="book-cover">
+                </div>
+                <div class="book-info">
+                    <h3>Knight Of Chaos II</h3>
+                    <span class="author">Glauber</span>
+                    <p class="description">Uma jornada épica através de mundos desconhecidos e perigosos.</p>
+                    <span class="chapters">70 Capítulos</span>
+                    <button class="edit-btn" onclick="openEditModal('Knight Of Chaos II', 'Glauber', 'Uma jornada épica através de mundos desconhecidos e perigosos.', '70')">Editar</button>
+                </div>
+            </div>
+            
+            <div class="book-card">
+                <div class="book-cover-container">
+                    <img src="https://illusia.com.br/wp-content/uploads/2019/03/Koc-Illusia-webp.webp" alt="Knight Of Chaos III" class="book-cover">
+                </div>
+                <div class="book-info">
+                    <h3>Knight Of Chaos III</h3>
+                    <span class="author">Glauber</span>
+                    <p class="description">Uma jornada épica através de mundos desconhecidos e perigosos.</p>
+                    <span class="chapters">70 Capítulos</span>
+                    <button class="edit-btn" onclick="openEditModal('Knight Of Chaos III', 'Glauber', 'Uma jornada épica através de mundos desconhecidos e perigosos.', '70')">Editar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Livro</h2>
+                <div class="subtitle">KNIGHT OF CHAOS | CLAUBER 1907</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="bookTitle">Título:</label>
+                <input type="text" id="bookTitle" placeholder="Digite o título do livro">
+            </div>
+            
+            <div class="form-group">
+                <label for="bookAuthor">Autor:</label>
+                <input type="text" id="bookAuthor" placeholder="Digite o nome do autor">
+            </div>
+            
+            <div class="form-group">
+                <label for="bookDescription">Sinopse:</label>
+                <textarea id="bookDescription" placeholder="Digite a sinopse do livro"></textarea>
+            </div>
+            
+            <div class="book-preview">
+                <h3 id="previewTitle">Knight Of Chaos | Glauber</h3>
+                <div class="author" id="previewAuthor">Glauber</div>
+                <div class="description" id="previewDescription">Uma jornada épica através de mundos desconhecidos e perigosos.</div>
+                <div class="chapters" id="previewChapters">70 Capítulos</div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+                <button class="btn-save">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funções para controlar o modal
+        function openEditModal(title, author, description, chapters) {
+            document.getElementById('bookTitle').value = title;
+            document.getElementById('bookAuthor').value = author;
+            document.getElementById('bookDescription').value = description;
+            
+            // Atualiza a pré-visualização
+            document.getElementById('previewTitle').textContent = title;
+            document.getElementById('previewAuthor').textContent = author;
+            document.getElementById('previewDescription').textContent = description;
+            document.getElementById('previewChapters').textContent = chapters + ' Capítulos';
+            
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        // Adiciona evento ao botão "Adicionar Livro"
+        document.getElementById('addBookBtn').addEventListener('click', function() {
+            openEditModal('', '', '', '0');
+        });
+        
+        // Atualiza a pré-visualização quando os campos são editados
+        document.getElementById('bookTitle').addEventListener('input', function() {
+            document.getElementById('previewTitle').textContent = this.value || 'Título do Livro';
+        });
+        
+        document.getElementById('bookAuthor').addEventListener('input', function() {
+            document.getElementById('previewAuthor').textContent = this.value || 'Autor';
+        });
+        
+        document.getElementById('bookDescription').addEventListener('input', function() {
+            document.getElementById('previewDescription').textContent = this.value || 'Descrição do livro';
+        });
+        
+        // Fecha o modal ao clicar fora do conteúdo
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
