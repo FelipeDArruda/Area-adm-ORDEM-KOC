@@ -1,4 +1,3 @@
-<script>
 // Alternar entre abas de configurações
 function switchSettingsTab(tab) {
     // Esconde todos os conteúdos
@@ -44,4 +43,3 @@ document.querySelectorAll('.input-textarea').forEach(textarea => {
         this.style.height = (this.scrollHeight) + 'px';
     });
 });
-</script>

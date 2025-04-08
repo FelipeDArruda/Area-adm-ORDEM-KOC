@@ -8,17 +8,15 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <h1>Dashboard</h1>
+        <h1 class="dashboard-title">Dashboard</h1>
         
-        <div class="dashboard-section">
-            <h2>Visualizações</h2>
-            <div class="filter-options">
-                <span class="filter active" data-period="year">Ano</span>
-                <span class="filter" data-period="month">Mês</span>
-                <span class="filter" data-period="week">Semana</span>
-            </div>
-            
-            <!-- Gráfico principal -->
+        <div class="filter-options">
+            <button class="filter active" data-period="year">Anual</button>
+            <button class="filter" data-period="month">Mensal</button>
+            <button class="filter" data-period="week">Semanal</button>
+        </div>
+        
+        <div class="chart-wrapper">
             <div class="chart-container">
                 <canvas id="mainChart"></canvas>
             </div>

@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Lateral Completo</title>
+    <title>Painel Administrativo - Ordem KOC</title>
+    <!-- Carrega Font Awesome antes dos estilos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Ordem correta de carregamento CSS -->
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/dash.css"> 
-    <link rel="stylesheet" href="css/perfil.css"> 
-
+    <link rel="stylesheet" href="css/perfil.css">
+    <!-- Pré-carrega Chart.js -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script">
 </head>
 <body>
     <nav class="menu-lateral">
         <div class="logo" id="menu-toggle">
             <i class="fas fa-bars"></i>
-            <span class="logo-text">Ordem koc</span>
+            <span class="logo-text">Ordem KOC</span>
         </div>
         
         <a href="#" class="menu-item" data-page="dashboard">
@@ -25,24 +28,24 @@
 
         <a href="#" class="menu-item" data-page="catalog">
             <i class="fas fa-book"></i>
-            <span>Catálogo de livros</span>
+            <span>Catálogo</span>
         </a>
         <a href="#" class="menu-item" data-page="capitulos">
             <i class="fas fa-bullhorn"></i>
             <span>Capítulos</span>
         </a>
         <a href="#" class="menu-item" data-page="comentarios">
-            <i class="fas fa-ad"></i>
+            <i class="fas fa-comments"></i>
             <span>Comentários</span>
         </a>
         <div class="divisor"></div>
         <a href="#" class="menu-item" data-page="security">
             <i class="fas fa-shield-alt"></i>
-            <span>Security</span>
+            <span>Segurança</span>
         </a>
         <a href="#" class="menu-item" data-page="platforms">
             <i class="fas fa-cubes"></i>
-            <span>Platforms</span>
+            <span>Plataformas</span>
         </a>
         
         <div class="divisor"></div>
@@ -58,34 +61,65 @@
             <span>Configurações</span>
         </a>
         
-        <!-- Área do usuário logado -->
+        <!-- Área do usuário melhorada -->
         <div class="user-info">
             <div class="user-avatar">
-                <i class="fas fa-user-circle"></i>
+                <img src="img/avatar.jpg" alt="Avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDJDNi40NzkgMiAyIDYuNDc5IDIgMTJzNC40NzkgMTAgMTAgMTAgMTAtNC40NzkgMTAtMTBTMTcuNTIxIDIgMTIgMnpNMTIgNWMxLjgyNyAwIDMuMzMxIDEuNjA1IDMuNzQ5IDMuNUg4LjI1MUM4LjY2OSA2LjYwNSAxMC4xNzMgNSAxMiA1ek01IDIwLjYyOUE4LjUzMyA4LjUzMyAwIDAgMSA3LjMgMTUuNWg5LjRhOC41MzMgOC41MzMgMCAwIDEgMi4zIDUuMTI5QTcuOTkzIDcuOTkzIDAgMCAxIDEyIDIwYTcuOTkzIDcuOTkzIDAgMCAxLTctLjM3MXoiLz48L3N2Zz4='">
             </div>
             <div class="user-details">
                 <span class="user-name">Arruda</span>
-                <span class="user-status">Dev</span>
+                <span class="user-role">Dev</span>
             </div>
-            <a href="#" class="logout-btn" id="logout-btn">
+            <button class="logout-btn" id="logout-btn" aria-label="Sair">
                 <i class="fas fa-sign-out-alt"></i>
-            </a>
+            </button>
         </div>
     </nav>
     
     <main class="conteudo" id="main-content">
-        <!-- Conteúdo será carregado dinamicamente aqui -->
+        <!-- Fallback inicial -->
+        <div class="page-loading">
+            <div class="loader"></div>
+            <p>Carregando painel administrativo...</p>
+        </div>
     </main>
+
+    <!-- Scripts na ordem correta -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/base.js"></script>
+    <!-- Scripts base primeiro -->
+    <script src="js/base.js" type="module"></script>
     <script src="js/dash.js"></script>
+
     <script src="js/catalog.js"></script>
-    <script src="js/capitulos.js"></script>
+    <script src="js/capitulos.js"></script> 
     <script src="js/security.js"></script>
     <script src="js/platforms.js"></script>
     <script src="js/chat.js"></script>
     <script src="js/cards.js"></script>
     <script src="js/configuracoes.js"></script>
-    <!-- Removido o login.js já que não será mais necessário -->
+
+
+
+
+    <script nomodule>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fallbackScripts = [
+                'js/dash.js',
+                'js/catalog.js',
+                'js/capitulos.js',
+                'js/security.js',
+                'js/platforms.js',
+                'js/chat.js',
+                'js/cards.js',
+                'js/configuracoes.js'
+            ];
+            
+            fallbackScripts.forEach(src => {
+                const script = document.createElement('script');
+                script.src = src;
+                document.body.appendChild(script);
+            });
+        });
+    </script>
 </body>
 </html>
